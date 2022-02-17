@@ -51,5 +51,74 @@ echo "module.exports = {
     'react/prop-types': 'off',
     'simple-import-sort/imports': 'warn',
   },
-};" > .eslintrc.js
+};" > .eslintrc.js && \
+echo "/** @type {import("snowpack").SnowpackUserConfig } */
+export default {
+  mount: {
+    public: { url: '/', static: true },
+    src: { url: '/dist' },
+  },
+  plugins: [
+    '@snowpack/plugin-react-refresh',
+    '@snowpack/plugin-dotenv',
+    [
+      '@snowpack/plugin-typescript',
+      {
+        /* Yarn PnP workaround: see https://www.npmjs.com/package/@snowpack/plugin-typescript */
+        ...(process.versions.pnp ? { tsc: 'yarn pnpify tsc' } : {}),
+      },
+    ],
+  ],
+  routes: [
+    /* Enable an SPA Fallback in development: */
+    // {"match": "routes", "src": ".*", "dest": "/index.html"},
+  ],
+  optimize: {
+    /* Example: Bundle your final build: */
+    // "bundle": true,
+  },
+  packageOptions: {
+    /* ... */
+  },
+  devOptions: {
+    /* ... */
+  },
+  buildOptions: {
+    /* ... */
+  },
+  alias: {
+    "@components": "./src/components",
+  }
+
+};
+" > snowpack.config.mjs && \
+echo "{
+  "include": ["src", "types"],
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "baseUrl": "./",
+    /* paths - import rewriting/resolving */
+    "paths": {
+      "@components": ["src/components"]
+      // If you configured any Snowpack aliases, add them here.
+      // Add this line to get types for streaming imports (packageOptions.source="remote"):
+      //     "*": [".snowpack/types/*"]
+      // More info: https://www.snowpack.dev/guides/streaming-imports
+    },
+    /* noEmit - Snowpack builds (emits) files, not tsc. */
+    "noEmit": true,
+    /* Additional Options */
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["mocha", "snowpack-env"],
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "importsNotUsedAsValues": "error"
+  }
+}
+" > tsconfig.json
 
