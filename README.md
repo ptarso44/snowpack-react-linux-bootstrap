@@ -6,6 +6,7 @@ Those scripts only work on linux. They will also work in Containers and WSL.
 
 ## Installation Instructions
 1. If you dont have node, npm, npx or yarn installed, run "install_node16_npm8_yarn.sh"
-2. Run "start_snowpack_app_eslint_prettier_ts.sh" to bootstrap the application.
+2. Before running the bootstrap script, to define your React app name, run the command -> export APPNAME="<your_application_name_here>"
+3. Run "start_snowpack_app_eslint_prettier_ts.sh" to bootstrap the application.
 
 Happy Coding :D
